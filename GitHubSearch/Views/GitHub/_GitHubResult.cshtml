@@ -1,0 +1,43 @@
+﻿@model GitHubSearch.Models.GitHubUser
+
+@if (Model == null || string.IsNullOrEmpty(Model.Login))
+{
+    <div class="alert alert-warning">No user data found.</div>
+}
+else
+{
+    <div class="card shadow rounded-3 mb-4">
+        <div class="card-body">
+            <h5 class="card-title">GitHub User Info</h5>
+            <p><strong>Username:</strong> @Model.Login</p>
+            <p><strong>Location:</strong> @(Model.Location ?? "Unknown")</p>
+            @if (!string.IsNullOrEmpty(Model.Avatar_Url))
+            {
+                <img src="@Model.Avatar_Url" alt="Avatar" class="img-thumbnail mb-3" style="max-width:150px;" />
+            }
+        </div>
+    </div>
+
+    if (Model.GitHubRepos != null && Model.GitHubRepos.Any())
+    {
+        <div class="card shadow rounded-3">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Top Repositories</h5>
+                <ul class="list-group list-group-flush">
+                    @foreach (var repo in Model.GitHubRepos)
+                    {
+                        <li class="list-group-item">
+                            <h6><a href="@repo.HtmlUrl" target="_blank">@repo.Name</a></h6>
+                            <p class="mb-1">@repo.Description</p>
+                            <small class="text-muted">⭐ @repo.StargazersCount</small>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mt-3">No repositories found.</div>
+    }
+}
